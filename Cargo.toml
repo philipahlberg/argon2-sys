@@ -1,0 +1,23 @@
+[package]
+name = "argon2-sys"
+version = "0.0.0"
+edition = "2018"
+description = "Bindings to the argon2 C reference implementation"
+categories = ["api-bindings", "cryptography"]
+keywords = ["argon2", "cryptography", "hash", "password", "security"]
+license = "Apache-2.0"
+readme = "README.md"
+build = "build.rs"
+links = "argon2"
+repository = "https://github.com/philipahlberg/argon2-sys"
+homepage = "https://github.com/philipahlberg/argon2-sys"
+documentation = "https://docs.rs/argon2-sys"
+
+[dependencies]
+libc = "0.2"
+
+[build-dependencies]
+cc = { version = "1.0", features = ["parallel"] }
+
+[features]
+simd = []
