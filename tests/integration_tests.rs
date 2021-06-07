@@ -1,9 +1,8 @@
 use argon2_sys::{
-    argon2_error_message, argon2_hash, argon2_verify, Argon2_ErrorCodes_ARGON2_DECODING_FAIL,
-    Argon2_ErrorCodes_ARGON2_MEMORY_TOO_LITTLE, Argon2_ErrorCodes_ARGON2_OK,
-    Argon2_ErrorCodes_ARGON2_PWD_PTR_MISMATCH, Argon2_ErrorCodes_ARGON2_SALT_TOO_SHORT,
-    Argon2_ErrorCodes_ARGON2_VERIFY_MISMATCH, Argon2_type_Argon2_i, Argon2_type_Argon2_id,
-    Argon2_version_ARGON2_VERSION_10, Argon2_version_ARGON2_VERSION_13,
+    argon2_error_message, argon2_hash, argon2_verify, Argon2_type_Argon2_i, Argon2_type_Argon2_id,
+    Argon2_version_ARGON2_VERSION_10, Argon2_version_ARGON2_VERSION_13, ARGON2_DECODING_FAIL,
+    ARGON2_MEMORY_TOO_LITTLE, ARGON2_OK, ARGON2_PWD_PTR_MISMATCH, ARGON2_SALT_TOO_SHORT,
+    ARGON2_VERIFY_MISMATCH,
 };
 use std::ffi::{CStr, CString};
 
@@ -72,7 +71,7 @@ mod argon2i_v10 {
     #[test]
     fn case_1() {
         let output = run_hash(2, 16, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         assert_eq!(
             output.hash,
             hex::decode("f6c4db4a54e2a370627aff3db6176b94a2a209a62c8e36152711802f7b30c694")
@@ -83,7 +82,7 @@ mod argon2i_v10 {
     #[test]
     fn case_2() {
         let output = run_hash(2, 18, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         assert_eq!(
             output.hash,
             hex::decode("3e689aaa3d28a77cf2bc72a51ac53166761751182f1ee292e3f677a7da4c2467")
@@ -94,7 +93,7 @@ mod argon2i_v10 {
     #[test]
     fn case_3() {
         let output = run_hash(2, 8, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         assert_eq!(
             output.hash,
             hex::decode("fd4dd83d762c49bdeaf57c47bdcd0c2f1babf863fdeb490df63ede9975fccf06")
@@ -105,7 +104,7 @@ mod argon2i_v10 {
     #[test]
     fn case_4() {
         let output = run_hash(2, 8, 2, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         assert_eq!(
             output.hash,
             hex::decode("b6c11560a6a9d61eac706b79a2f97d68b4463aa3ad87e00c07e2b01e90c564fb")
@@ -116,7 +115,7 @@ mod argon2i_v10 {
     #[test]
     fn case_5() {
         let output = run_hash(1, 16, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         assert_eq!(
             output.hash,
             hex::decode("81630552b8f3b1f48cdb1992c4c678643d490b2b5eb4ff6c4b3438b5621724b2")
@@ -127,7 +126,7 @@ mod argon2i_v10 {
     #[test]
     fn case_6() {
         let output = run_hash(4, 16, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         assert_eq!(
             output.hash,
             hex::decode("f212f01615e6eb5d74734dc3ef40ade2d51d052468d8c69440a3a1f2c1c2847b")
@@ -138,7 +137,7 @@ mod argon2i_v10 {
     #[test]
     fn case_7() {
         let output = run_hash(2, 16, 1, "differentpassword", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         assert_eq!(
             output.hash,
             hex::decode("e9c902074b6754531a3a0be519e5baf404b30ce69b3f01ac3bf21229960109a3")
@@ -149,7 +148,7 @@ mod argon2i_v10 {
     #[test]
     fn case_8() {
         let output = run_hash(2, 16, 1, "password", "diffsalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         assert_eq!(
             output.hash,
             hex::decode("79a103b90fe8aef8570cb31fc8b22259778916f8336b7bdac3892569d4f1c497")
@@ -166,7 +165,7 @@ mod argon2i_v10 {
         let encoded =
             "$argon2i$m=65536,t=2,p=1c29tZXNhbHQ$9sTbSlTio3Biev89thdrlKKiCaYsjjYVJxGAL3swxpQ";
         let ret = run_verify(encoded, password, TY);
-        assert_eq!(ret, Argon2_ErrorCodes_ARGON2_DECODING_FAIL);
+        assert_eq!(ret, ARGON2_DECODING_FAIL);
     }
 
     // Handle an invalid encoding correctly (it is missing a $)
@@ -176,7 +175,7 @@ mod argon2i_v10 {
         let encoded =
             "$argon2i$m=65536,t=2,p=1$c29tZXNhbHQ9sTbSlTio3Biev89thdrlKKiCaYsjjYVJxGAL3swxpQ";
         let ret = run_verify(encoded, password, TY);
-        assert_eq!(ret, Argon2_ErrorCodes_ARGON2_DECODING_FAIL);
+        assert_eq!(ret, ARGON2_DECODING_FAIL);
     }
 
     // Handle an invalid encoding correctly (salt is too short)
@@ -185,7 +184,7 @@ mod argon2i_v10 {
         let password = "password";
         let encoded = "$argon2i$m=65536,t=2,p=1$$9sTbSlTio3Biev89thdrlKKiCaYsjjYVJxGAL3swxpQ";
         let ret = run_verify(encoded, password, TY);
-        assert_eq!(ret, Argon2_ErrorCodes_ARGON2_SALT_TOO_SHORT);
+        assert_eq!(ret, ARGON2_SALT_TOO_SHORT);
     }
 
     // Handle an mismatching hash (the encoded password is "passwore")
@@ -195,12 +194,12 @@ mod argon2i_v10 {
         let encoded =
             "$argon2i$m=65536,t=2,p=1$c29tZXNhbHQ$b2G3seW+uPzerwQQC+/E1K50CLLO7YXy0JRcaTuswRo";
         let ret = run_verify(encoded, password, TY);
-        assert_eq!(ret, Argon2_ErrorCodes_ARGON2_VERIFY_MISMATCH);
+        assert_eq!(ret, ARGON2_VERIFY_MISMATCH);
     }
 
     #[test]
     fn case_13() {
-        let msg_ptr = unsafe { argon2_error_message(Argon2_ErrorCodes_ARGON2_DECODING_FAIL) };
+        let msg_ptr = unsafe { argon2_error_message(ARGON2_DECODING_FAIL) };
         let msg = unsafe { CStr::from_ptr(msg_ptr) };
         assert_eq!(msg.to_str().unwrap(), "Decoding failed");
     }
@@ -215,7 +214,7 @@ mod argon2i_v13 {
     #[test]
     fn case_14() {
         let output = run_hash(2, 16, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("c1628832147d9720c5bd1cfd61367078729f6dfb6f8fea9ff98158e0d7816ed0")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -227,7 +226,7 @@ mod argon2i_v13 {
     #[test]
     fn case_15() {
         let output = run_hash(2, 18, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("296dbae80b807cdceaad44ae741b506f14db0959267b183b118f9b24229bc7cb")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -239,7 +238,7 @@ mod argon2i_v13 {
     #[test]
     fn case_16() {
         let output = run_hash(2, 8, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("89e9029f4637b295beb027056a7336c414fadd43f6b208645281cb214a56452f")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -251,7 +250,7 @@ mod argon2i_v13 {
     #[test]
     fn case_17() {
         let output = run_hash(2, 8, 2, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("4ff5ce2769a1d7f4c8a491df09d41a9fbe90e5eb02155a13e4c01e20cd4eab61")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -263,7 +262,7 @@ mod argon2i_v13 {
     #[test]
     fn case_18() {
         let output = run_hash(1, 16, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("d168075c4d985e13ebeae560cf8b94c3b5d8a16c51916b6f4ac2da3ac11bbecf")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -275,7 +274,7 @@ mod argon2i_v13 {
     #[test]
     fn case_19() {
         let output = run_hash(4, 16, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("aaa953d58af3706ce3df1aefd4a64a84e31d7f54175231f1285259f88174ce5b")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -287,7 +286,7 @@ mod argon2i_v13 {
     #[test]
     fn case_20() {
         let output = run_hash(2, 16, 1, "differentpassword", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("14ae8da01afea8700c2358dcef7c5358d9021282bd88663a4562f59fb74d22ee")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -299,7 +298,7 @@ mod argon2i_v13 {
     #[test]
     fn case_21() {
         let output = run_hash(2, 16, 1, "password", "diffsalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("b0357cccfbef91f3860b0dba447b2348cbefecadaf990abfe9cc40726c521271")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -317,7 +316,7 @@ mod argon2i_v13 {
         let encoded =
             "$argon2i$v=19$m=65536,t=2,p=1c29tZXNhbHQ$wWKIMhR9lyDFvRz9YTZweHKfbftvj+qf+YFY4NeBbtA";
         let ret = run_verify(encoded, password, TY);
-        assert_eq!(ret, Argon2_ErrorCodes_ARGON2_DECODING_FAIL);
+        assert_eq!(ret, ARGON2_DECODING_FAIL);
     }
 
     // Handle an invalid encoding correctly (it is missing a $)
@@ -327,7 +326,7 @@ mod argon2i_v13 {
         let encoded =
             "$argon2i$v=19$m=65536,t=2,p=1$c29tZXNhbHQwWKIMhR9lyDFvRz9YTZweHKfbftvj+qf+YFY4NeBbtA";
         let ret = run_verify(encoded, password, TY);
-        assert_eq!(ret, Argon2_ErrorCodes_ARGON2_DECODING_FAIL);
+        assert_eq!(ret, ARGON2_DECODING_FAIL);
     }
 
     // Handle an invalid encoding correctly (salt is too short)
@@ -336,7 +335,7 @@ mod argon2i_v13 {
         let password = "password";
         let encoded = "$argon2i$v=19$m=65536,t=2,p=1$$9sTbSlTio3Biev89thdrlKKiCaYsjjYVJxGAL3swxpQ";
         let ret = run_verify(encoded, password, TY);
-        assert_eq!(ret, Argon2_ErrorCodes_ARGON2_SALT_TOO_SHORT);
+        assert_eq!(ret, ARGON2_SALT_TOO_SHORT);
     }
 
     // Handle an invalid encoding correctly (the encoded password is "passwore")
@@ -346,7 +345,7 @@ mod argon2i_v13 {
         let encoded =
             "$argon2i$v=19$m=65536,t=2,p=1$c29tZXNhbHQ$8iIuixkI73Js3G1uMbezQXD0b8LG4SXGsOwoQkdAQIM";
         let ret = run_verify(encoded, password, TY);
-        assert_eq!(ret, Argon2_ErrorCodes_ARGON2_VERIFY_MISMATCH);
+        assert_eq!(ret, ARGON2_VERIFY_MISMATCH);
     }
 }
 
@@ -359,7 +358,7 @@ mod argon2id_v13 {
     #[test]
     fn case_26() {
         let output = run_hash(2, 16, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("09316115d5cf24ed5a15a31a3ba326e5cf32edc24702987c02b6566f61913cf7")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -371,7 +370,7 @@ mod argon2id_v13 {
     #[test]
     fn case_27() {
         let output = run_hash(2, 18, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("78fe1ec91fb3aa5657d72e710854e4c3d9b9198c742f9616c2f085bed95b2e8c")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -383,7 +382,7 @@ mod argon2id_v13 {
     #[test]
     fn case_28() {
         let output = run_hash(2, 8, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("9dfeb910e80bad0311fee20f9c0e2b12c17987b4cac90c2ef54d5b3021c68bfe")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -395,7 +394,7 @@ mod argon2id_v13 {
     #[test]
     fn case_29() {
         let output = run_hash(2, 8, 2, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("6d093c501fd5999645e0ea3bf620d7b8be7fd2db59c20d9fff9539da2bf57037")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -407,7 +406,7 @@ mod argon2id_v13 {
     #[test]
     fn case_30() {
         let output = run_hash(1, 16, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("f6a5adc1ba723dddef9b5ac1d464e180fcd9dffc9d1cbf76cca2fed795d9ca98")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -419,7 +418,7 @@ mod argon2id_v13 {
     #[test]
     fn case_31() {
         let output = run_hash(4, 16, 1, "password", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("9025d48e68ef7395cca9079da4c4ec3affb3c8911fe4f86d1a2520856f63172c")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -431,7 +430,7 @@ mod argon2id_v13 {
     #[test]
     fn case_32() {
         let output = run_hash(2, 16, 1, "differentpassword", "somesalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("0b84d652cf6b0c4beaef0dfe278ba6a80df6696281d7e0d2891b817d8c458fde")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -443,7 +442,7 @@ mod argon2id_v13 {
     #[test]
     fn case_33() {
         let output = run_hash(2, 16, 1, "password", "diffsalt", TY, VERSION);
-        assert_eq!(output.code, Argon2_ErrorCodes_ARGON2_OK);
+        assert_eq!(output.code, ARGON2_OK);
         let hash = hex::decode("bdf32b05ccc42eb15d58fd19b1f856b113da1e9a5874fdcc544308565aa8141c")
             .unwrap();
         assert_eq!(output.hash, hash);
@@ -487,7 +486,7 @@ mod argon2id_v13 {
             )
         };
 
-        assert_eq!(code, Argon2_ErrorCodes_ARGON2_MEMORY_TOO_LITTLE);
+        assert_eq!(code, ARGON2_MEMORY_TOO_LITTLE);
     }
 
     #[test]
@@ -523,7 +522,7 @@ mod argon2id_v13 {
             )
         };
 
-        assert_eq!(code, Argon2_ErrorCodes_ARGON2_PWD_PTR_MISMATCH);
+        assert_eq!(code, ARGON2_PWD_PTR_MISMATCH);
     }
 
     #[test]
@@ -559,6 +558,6 @@ mod argon2id_v13 {
             )
         };
 
-        assert_eq!(code, Argon2_ErrorCodes_ARGON2_SALT_TOO_SHORT);
+        assert_eq!(code, ARGON2_SALT_TOO_SHORT);
     }
 }
