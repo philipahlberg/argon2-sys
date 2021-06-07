@@ -121,14 +121,14 @@ pub struct Argon2_Context {
 pub type argon2_context = Argon2_Context;
 
 pub type Argon2_type = libc::c_uint;
-pub use self::Argon2_type as argon2_type;
+pub use Argon2_type as argon2_type;
 
 pub const Argon2_d: Argon2_type = 0;
 pub const Argon2_i: Argon2_type = 1;
 pub const Argon2_id: Argon2_type = 2;
 
 pub type Argon2_version = libc::c_uint;
-pub use self::Argon2_version as argon2_version;
+pub use Argon2_version as argon2_version;
 
 pub const ARGON2_VERSION_10: Argon2_version = 0x10;
 pub const ARGON2_VERSION_13: Argon2_version = 0x13;
