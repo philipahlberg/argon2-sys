@@ -1,5 +1,5 @@
 use argon2_sys::{
-    argon2_error_message, argon2_hash, argon2_verify, Argon2_type_Argon2_i, Argon2_type_Argon2_id,
+    argon2_error_message, argon2_hash, argon2_verify, Argon2_i, Argon2_id,
     Argon2_version_ARGON2_VERSION_10, Argon2_version_ARGON2_VERSION_13, ARGON2_DECODING_FAIL,
     ARGON2_MEMORY_TOO_LITTLE, ARGON2_OK, ARGON2_PWD_PTR_MISMATCH, ARGON2_SALT_TOO_SHORT,
     ARGON2_VERIFY_MISMATCH,
@@ -65,7 +65,7 @@ fn run_verify(encoded: &str, password: &str, ty: u32) -> i32 {
 mod argon2i_v10 {
     use super::*;
 
-    const TY: u32 = Argon2_type_Argon2_i;
+    const TY: u32 = Argon2_i;
     const VERSION: u32 = Argon2_version_ARGON2_VERSION_10;
 
     #[test]
@@ -208,7 +208,7 @@ mod argon2i_v10 {
 mod argon2i_v13 {
     use super::*;
 
-    const TY: u32 = Argon2_type_Argon2_i;
+    const TY: u32 = Argon2_i;
     const VERSION: u32 = Argon2_version_ARGON2_VERSION_13;
 
     #[test]
@@ -352,7 +352,7 @@ mod argon2i_v13 {
 mod argon2id_v13 {
     use super::*;
 
-    const TY: u32 = Argon2_type_Argon2_id;
+    const TY: u32 = Argon2_id;
     const VERSION: u32 = Argon2_version_ARGON2_VERSION_13;
 
     #[test]
