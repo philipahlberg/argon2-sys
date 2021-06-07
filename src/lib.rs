@@ -86,14 +86,12 @@ pub const ARGON2_THREAD_FAIL: Argon2_ErrorCodes = -33;
 pub const ARGON2_DECODING_LENGTH_FAIL: Argon2_ErrorCodes = -34;
 pub const ARGON2_VERIFY_MISMATCH: Argon2_ErrorCodes = -35;
 
-pub type size_t = libc::c_ulong;
-
 pub type allocate_fptr = ::std::option::Option<
-    unsafe extern "C" fn(memory: *mut *mut u8, bytes_to_allocate: size_t) -> libc::c_int,
+    unsafe extern "C" fn(memory: *mut *mut u8, bytes_to_allocate: libc::size_t) -> libc::c_int,
 >;
 
 pub type deallocate_fptr =
-    ::std::option::Option<unsafe extern "C" fn(memory: *mut u8, bytes_to_allocate: size_t)>;
+    ::std::option::Option<unsafe extern "C" fn(memory: *mut u8, bytes_to_allocate: libc::size_t)>;
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -423,5 +421,5 @@ extern "C" {
         saltlen: u32,
         hashlen: u32,
         ty: argon2_type,
-    ) -> size_t;
+    ) -> libc::size_t;
 }
