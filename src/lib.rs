@@ -127,12 +127,12 @@ pub const Argon2_d: Argon2_type = 0;
 pub const Argon2_i: Argon2_type = 1;
 pub const Argon2_id: Argon2_type = 2;
 
-pub const Argon2_version_ARGON2_VERSION_10: Argon2_version = 0x10;
-pub const Argon2_version_ARGON2_VERSION_13: Argon2_version = 0x13;
-pub const Argon2_version_ARGON2_VERSION_NUMBER: Argon2_version = Argon2_version_ARGON2_VERSION_13;
-
 pub type Argon2_version = libc::c_uint;
 pub use self::Argon2_version as argon2_version;
+
+pub const ARGON2_VERSION_10: Argon2_version = 0x10;
+pub const ARGON2_VERSION_13: Argon2_version = 0x13;
+pub const ARGON2_VERSION_NUMBER: Argon2_version = ARGON2_VERSION_13;
 
 extern "C" {
     /// Function that gives the string representation of an argon2_type.

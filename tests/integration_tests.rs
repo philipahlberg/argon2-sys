@@ -1,8 +1,7 @@
 use argon2_sys::{
-    argon2_error_message, argon2_hash, argon2_verify, Argon2_i, Argon2_id,
-    Argon2_version_ARGON2_VERSION_10, Argon2_version_ARGON2_VERSION_13, ARGON2_DECODING_FAIL,
+    argon2_error_message, argon2_hash, argon2_verify, Argon2_i, Argon2_id, ARGON2_DECODING_FAIL,
     ARGON2_MEMORY_TOO_LITTLE, ARGON2_OK, ARGON2_PWD_PTR_MISMATCH, ARGON2_SALT_TOO_SHORT,
-    ARGON2_VERIFY_MISMATCH,
+    ARGON2_VERIFY_MISMATCH, ARGON2_VERSION_10, ARGON2_VERSION_13,
 };
 use std::ffi::{CStr, CString};
 
@@ -66,7 +65,7 @@ mod argon2i_v10 {
     use super::*;
 
     const TY: u32 = Argon2_i;
-    const VERSION: u32 = Argon2_version_ARGON2_VERSION_10;
+    const VERSION: u32 = ARGON2_VERSION_10;
 
     #[test]
     fn case_1() {
@@ -209,7 +208,7 @@ mod argon2i_v13 {
     use super::*;
 
     const TY: u32 = Argon2_i;
-    const VERSION: u32 = Argon2_version_ARGON2_VERSION_13;
+    const VERSION: u32 = ARGON2_VERSION_13;
 
     #[test]
     fn case_14() {
@@ -353,7 +352,7 @@ mod argon2id_v13 {
     use super::*;
 
     const TY: u32 = Argon2_id;
-    const VERSION: u32 = Argon2_version_ARGON2_VERSION_13;
+    const VERSION: u32 = ARGON2_VERSION_13;
 
     #[test]
     fn case_26() {
