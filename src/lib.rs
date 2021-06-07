@@ -142,14 +142,14 @@ extern "C" {
     /// @param uppercase Whether the string should have the first letter uppercase
     ///
     /// @return NULL if invalid type, otherwise the string representation.
-    pub fn argon2_type2string(type_: argon2_type, uppercase: libc::c_int) -> *const libc::c_char;
+    pub fn argon2_type2string(ty: argon2_type, uppercase: libc::c_int) -> *const libc::c_char;
 
     /// Function that performs memory-hard hashing with certain degree of parallelism
     ///
     /// @param  context  Pointer to the Argon2 internal structure
     ///
     /// @return Error code if smth is wrong, ARGON2_OK otherwise
-    pub fn argon2_ctx(context: *mut argon2_context, type_: argon2_type) -> libc::c_int;
+    pub fn argon2_ctx(context: *mut argon2_context, ty: argon2_type) -> libc::c_int;
 
     /// Hashes a password with Argon2i, producing an encoded hash
     ///
@@ -282,10 +282,11 @@ extern "C" {
         pwdlen: libc::size_t,
         salt: *const libc::c_void,
         saltlen: libc::size_t,
+        hash: *mut libc::c_void,
         hashlen: libc::size_t,
         encoded: *mut libc::c_char,
         encodedlen: libc::size_t,
-        type_: argon2_type,
+        ty: argon2_type,
         version: u32,
     ) -> libc::c_int;
 
@@ -300,27 +301,27 @@ extern "C" {
     /// @pre   Returns ARGON2_OK if successful
     pub fn argon2i_verify(
         encoded: *const libc::c_char,
-        pwd: *const libc::c_char,
+        pwd: *const libc::c_void,
         pwdlen: libc::size_t,
     ) -> libc::c_int;
 
     pub fn argon2d_verify(
         encoded: *const libc::c_char,
-        pwd: *const libc::c_char,
+        pwd: *const libc::c_void,
         pwdlen: libc::size_t,
     ) -> libc::c_int;
 
     pub fn argon2id_verify(
         encoded: *const libc::c_char,
-        pwd: *const libc::c_char,
+        pwd: *const libc::c_void,
         pwdlen: libc::size_t,
     ) -> libc::c_int;
 
     pub fn argon2_verify(
         encoded: *const libc::c_char,
-        pwd: *const libc::c_char,
+        pwd: *const libc::c_void,
         pwdlen: libc::size_t,
-        type_: argon2_type,
+        ty: argon2_type,
     ) -> libc::c_int;
 
     ///  Argon2d: Version of Argon2 that picks memory blocks depending
@@ -392,7 +393,7 @@ extern "C" {
     pub fn argon2_verify_ctx(
         context: *mut argon2_context,
         hash: *const libc::c_char,
-        type_: argon2_type,
+        ty: argon2_type,
     ) -> libc::c_int;
 
     /// Get the associated error message for given error code
@@ -421,6 +422,6 @@ extern "C" {
         parallelism: u32,
         saltlen: u32,
         hashlen: u32,
-        type_: argon2_type,
+        ty: argon2_type,
     ) -> size_t;
 }
