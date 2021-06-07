@@ -1,17 +1,25 @@
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 
+/// Minimum number of lanes (degree of parallelism)
 pub const ARGON2_MIN_LANES: u64 = 1;
+/// Maximum number of lanes (degree of parallelism)
 pub const ARGON2_MAX_LANES: u64 = 0xFFFFFF;
 
+/// Minimum number of threads
 pub const ARGON2_MIN_THREADS: u64 = 1;
+/// Maximum number of threads
 pub const ARGON2_MAX_THREADS: u64 = 0xFFFFFF;
 
+/// Number of synchronization points between lanes per pass
 pub const ARGON2_SYNC_POINTS: u64 = 4;
 
+/// Minimum digest size in bytes
 pub const ARGON2_MIN_OUTLEN: u64 = 4;
+/// Maximum digest size in bytes
 pub const ARGON2_MAX_OUTLEN: u64 = 0xFFFFFF;
 
+/// Minimum number of memory blocks (each of BLOCK_SIZE bytes)
 pub const ARGON2_MIN_MEMORY: u64 = 2 * ARGON2_SYNC_POINTS;
 
 const ADDRESSING_SPACE: u64 = (std::mem::size_of::<usize>() * 8) as u64;
@@ -26,23 +34,35 @@ const fn min(a: u64, b: u64) -> u64 {
 
 const ARGON2_MAX_MEMORY_BITS: u64 = min(32, ADDRESSING_SPACE - 10 - 1);
 
+/// Maximum number of memory blocks (each of BLOCK_SIZE bytes)
 pub const ARGON2_MAX_MEMORY: u64 = min(0xFFFFFFFF, 1 << ARGON2_MAX_MEMORY_BITS);
 
+/// Minimum number of passes
 pub const ARGON2_MIN_TIME: u64 = 1;
+/// Maximum number of passes
 pub const ARGON2_MAX_TIME: u64 = 0xFFFFFFFF;
 
+/// Minimum password length in bytes
 pub const ARGON2_MIN_PWD_LENGTH: u64 = 0;
+/// Maximum password length in bytes
 pub const ARGON2_MAX_PWD_LENGTH: u64 = 0xFFFFFFFF;
 
+/// Minimum associated data length in bytes
 pub const ARGON2_MIN_AD_LENGTH: u64 = 0;
+/// Maximum associated data length in bytes
 pub const ARGON2_MAX_AD_LENGTH: u64 = 0xFFFFFFFF;
 
+/// Minimum salt length in bytes
 pub const ARGON2_MIN_SALT_LENGTH: u64 = 8;
+/// Maximum salt length in bytes
 pub const ARGON2_MAX_SALT_LENGTH: u64 = 0xFFFFFFFF;
 
+/// Minimum key length in bytes
 pub const ARGON2_MIN_SECRET: u64 = 0;
+/// Maximum key length in bytes
 pub const ARGON2_MAX_SECRET: u64 = 0xFFFFFFFF;
 
+/// Flags to determine which fields are securely wiped (default = no wipe).
 pub const ARGON2_DEFAULT_FLAGS: u32 = 0;
 pub const ARGON2_FLAG_CLEAR_PASSWORD: u32 = 1 << 0;
 pub const ARGON2_FLAG_CLEAR_SECRET: u32 = 1 << 1;
@@ -93,6 +113,34 @@ pub type allocate_fptr = ::std::option::Option<
 pub type deallocate_fptr =
     ::std::option::Option<unsafe extern "C" fn(memory: *mut u8, bytes_to_allocate: libc::size_t)>;
 
+
+ /// *****
+ /// 
+ /// Context: structure to hold Argon2 inputs:
+ /// - output array and its length,
+ /// - password and its length,
+ /// - salt and its length,
+ /// - secret and its length,
+ /// - associated data and its length,
+ /// - number of passes, amount of used memory (in KBytes, can be rounded up a bit)
+ /// - number of parallel threads that will be run.
+ /// 
+ /// All the parameters above affect the output hash value.
+ /// Additionally, two function pointers can be provided to allocate and
+ /// deallocate the memory (if NULL, memory will be allocated internally).
+ /// Also, three flags indicate whether to erase password, secret as soon as they
+ /// are pre-hashed (and thus not needed anymore), and the entire memory.
+ /// 
+ /// *****
+ /// 
+ /// Simplest situation: you have output array `out[8]`, password is stored in
+ /// `pwd[32]`, salt is stored in `salt[16]`, you do not have keys nor associated
+ /// data. You need to spend 1 GB of RAM and you run 5 passes of Argon2d with
+ /// 4 parallel lanes.
+ /// You want to erase the password, but you're OK with last pass not being
+ /// erased. You want to use the default memory allocator.
+ /// Then you initialize:
+ /// ```Argon2_Context(out,8,pwd,32,salt,16,NULL,0,NULL,0,5,1<<20,4,4,NULL,NULL,true,false,false,false)```
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Argon2_Context {
