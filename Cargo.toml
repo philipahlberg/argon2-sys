@@ -1,6 +1,6 @@
 [package]
 name = "argon2-sys"
-version = "0.0.0"
+version = "0.1.0"
 edition = "2018"
 description = "Bindings to the argon2 C reference implementation"
 categories = ["api-bindings", "cryptography"]
