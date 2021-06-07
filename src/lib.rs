@@ -113,34 +113,33 @@ pub type allocate_fptr = ::std::option::Option<
 pub type deallocate_fptr =
     ::std::option::Option<unsafe extern "C" fn(memory: *mut u8, bytes_to_allocate: libc::size_t)>;
 
-
- /// *****
- /// 
- /// Context: structure to hold Argon2 inputs:
- /// - output array and its length,
- /// - password and its length,
- /// - salt and its length,
- /// - secret and its length,
- /// - associated data and its length,
- /// - number of passes, amount of used memory (in KBytes, can be rounded up a bit)
- /// - number of parallel threads that will be run.
- /// 
- /// All the parameters above affect the output hash value.
- /// Additionally, two function pointers can be provided to allocate and
- /// deallocate the memory (if NULL, memory will be allocated internally).
- /// Also, three flags indicate whether to erase password, secret as soon as they
- /// are pre-hashed (and thus not needed anymore), and the entire memory.
- /// 
- /// *****
- /// 
- /// Simplest situation: you have output array `out[8]`, password is stored in
- /// `pwd[32]`, salt is stored in `salt[16]`, you do not have keys nor associated
- /// data. You need to spend 1 GB of RAM and you run 5 passes of Argon2d with
- /// 4 parallel lanes.
- /// You want to erase the password, but you're OK with last pass not being
- /// erased. You want to use the default memory allocator.
- /// Then you initialize:
- /// ```Argon2_Context(out,8,pwd,32,salt,16,NULL,0,NULL,0,5,1<<20,4,4,NULL,NULL,true,false,false,false)```
+/// *****
+///
+/// Context: structure to hold Argon2 inputs:
+/// - output array and its length,
+/// - password and its length,
+/// - salt and its length,
+/// - secret and its length,
+/// - associated data and its length,
+/// - number of passes, amount of used memory (in KBytes, can be rounded up a bit)
+/// - number of parallel threads that will be run.
+///
+/// All the parameters above affect the output hash value.
+/// Additionally, two function pointers can be provided to allocate and
+/// deallocate the memory (if NULL, memory will be allocated internally).
+/// Also, three flags indicate whether to erase password, secret as soon as they
+/// are pre-hashed (and thus not needed anymore), and the entire memory.
+///
+/// *****
+///
+/// Simplest situation: you have output array `out[8]`, password is stored in
+/// `pwd[32]`, salt is stored in `salt[16]`, you do not have keys nor associated
+/// data. You need to spend 1 GB of RAM and you run 5 passes of Argon2d with
+/// 4 parallel lanes.
+/// You want to erase the password, but you're OK with last pass not being
+/// erased. You want to use the default memory allocator.
+/// Then you initialize:
+/// ```Argon2_Context(out,8,pwd,32,salt,16,NULL,0,NULL,0,5,1<<20,4,4,NULL,NULL,true,false,false,false)```
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Argon2_Context {
